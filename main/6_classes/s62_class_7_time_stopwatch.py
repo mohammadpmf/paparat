@@ -43,9 +43,9 @@ class Time():
     def __gt__(self, other: 'Time'):
         if self.h>other.h:
             return True
-        if self.m>other.m:
+        if self.h==other.h and self.m>other.m:
             return True
-        if self.s>other.s:
+        if self.h==other.h and self.m==other.m and self.s>other.s:
             return True
         return False
     
@@ -90,10 +90,29 @@ class StopWatch(Time):
     def __str__(self):
         return f"{super().__str__()}.{self.ms:03}"
 
+class Date():
+    def __init__(self, year=1990, month=1, day=1):
+        self.year=year
+        self.month=month
+        self.day=day
+    
+    def __str__(self):
+        return f"{self.year:04}-{self.month:02}-{self.day:02}"
+    
 
-# t1 = Time(17, 22, 30)
+class DateTime(Date, Time):
+    def __init__(self, year=1990, month=1, day=1, h=0, m=0, s=0):
+        super().__init__(year, month, day)
+        Time.__init__(self, h, m, s)
+    
+    def __str__(self):
+        return f"{super().__str__()} {Time.__str__(self)}"
+
+# t1 = Time(7, 20, 7)
 # t2 = Time(15, 10, 7)
 # t3 = t1-t2
-# print(t1==t2)
-s1 = StopWatch()
-s1.count()
+# print(t1>=t2)
+# s1 = StopWatch()
+# s1.count()
+dt1 = DateTime(2024, 2, 21, 8, 27, 69)
+print(dt1)
