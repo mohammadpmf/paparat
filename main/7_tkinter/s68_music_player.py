@@ -95,25 +95,28 @@ class MusicPlayer():
             while self.is_playing:
                 self.playing_time+=1
                 self.scale_passed_time.set(self.playing_time)
-                print("Playing:", self.playing_time)
                 sleep(1)
             while not self.is_playing:
-                self.playing_time=self.player.get_pos()
-                print("Paused:", self.playing_time)
+                self.playing_time=round(self.player.get_pos()/1000)
                 sleep(1)
 
     def load_music(self):
-        self.temp = filedialog.askopenfilename()
+        self.temp = filedialog.askopenfilename(
+        filetypes=(
+            ("Audio Files", ("*.mp3", "*.mpeg3", "*.wav", "*.ogg")),
+            ("All Files", "*.*"),
+            ),
+        )
         if self.temp in ["", None, ()]:
             return
         self.file_name = self.temp
         self.scale_passed_time.set(0)
         self.is_playing=False
         self.playing_time=0
-        if self.play_image_address == None:
-            self.btn_play_pause.config(text='Play')
-        else:
+        if self.play_image_address != None and self.pause_image_address != None and self.stop_image_address != None:
             self.btn_play_pause.config(image=self.img_play)
+        else:
+            self.btn_play_pause.config(text='Play')
         self.player.load(self.file_name)
         self.temp = pygame.mixer.Sound(self.file_name)
         self.lenght_of_music = round(self.temp.get_length())
@@ -129,20 +132,18 @@ class MusicPlayer():
             self.is_playing=False
             self.player.pause()
             self.playing_time=round(self.player.get_pos()/1000)
-            if self.play_image_address == None:
-                self.btn_play_pause.config(text='Play')
-            else:
+            if self.play_image_address != None and self.pause_image_address != None and self.stop_image_address != None:
                 self.btn_play_pause.config(image=self.img_play)
+            else:
+                self.btn_play_pause.config(text='Play')
         else:
             self.is_playing=True
-            if self.pause_image_address == None:
-                self.btn_play_pause.config(text='Pause')
-            else:
+            if self.play_image_address != None and self.pause_image_address != None and self.stop_image_address != None:
                 self.btn_play_pause.config(image=self.img_pause)
+            else:
+                self.btn_play_pause.config(text='Pause')
             self.playing_time=round(self.scale_passed_time.get())
-            self.player.set_pos(self.playing_time)
-            self.player.unpause()
-            # self.player.play(start=self.playing_time)
+            self.player.play(start=self.playing_time)
             if self.is_first_click:
                 self.is_first_click = False
                 self.th1 = Thread(target=self.update_passed_time, daemon=True)
@@ -156,10 +157,10 @@ class MusicPlayer():
         self.scale_passed_time.set(0)
         self.is_playing=False
         self.playing_time=0
-        if self.play_image_address == None:
-            self.btn_play_pause.config(text='Play')
-        else:
+        if self.play_image_address != None and self.pause_image_address != None and self.stop_image_address != None:
             self.btn_play_pause.config(image=self.img_play)
+        else:
+            self.btn_play_pause.config(text='Play')
 
     def change_volume(self, event):
         self.sound_volume=int(event)
@@ -167,8 +168,7 @@ class MusicPlayer():
 
     def manage_it(self, event):
         if self.is_playing:
-            # self.player.play(start=self.playing_time)
-            self.player.set_pos(self.playing_time)
+            self.player.play(start=self.playing_time)
 
     def play_from_here(self, event):
         if self.lenght_of_music>0:
@@ -177,6 +177,7 @@ class MusicPlayer():
 
     def place(self, x=10*1, y=10, width=BTN_SIZE*3+10*5, height=10*4+BTN_SIZE*2):
         self.frame_music_player.place(x=x, y=y, width=width, height=height,)
+
 
 if __name__=="__main__":
     root = Tk()
