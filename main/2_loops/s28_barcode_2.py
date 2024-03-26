@@ -23,7 +23,7 @@ while answer != "":
 total = 0
 for name, amount in factor.items():
     p = items.get(name)
-    cart.append(f"Item: {name:<20} Price: {p:<8} Amount: {amount:<10} Total: {p*amount:<10}")
+    cart.append(f"Item: {name:20} Price: {p:<8} Amount: {amount:<10} Total: {p*amount:<10}")
     total += p*amount
 
 for row in cart:
