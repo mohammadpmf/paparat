@@ -20,14 +20,18 @@ CNF_ENTRY = {
     'bg': bg,
     'fg': fg,
     "font": ('', 24),
-    "width": 5,
+    "width": 30,
 }
 CNF_GRID = {
     'padx': 1,
     'pady': 1,
     'sticky': 'news',
 }
-
+CNF_PACK={
+    'expand': 1,
+    'fill': 'both',
+    'side': 'left'
+}
 
 def clear():
     entry.delete(0, END)
@@ -204,57 +208,81 @@ secondary_fg_colors_menu.add_command(label ='violet', command = lambda: change_c
 secondary_fg_colors_menu.add_command(label ='tomato', command = lambda: change_color('fg', 'tomato'),background='tomato') 
 
 root.config(bg=bg, menu=menubar)
+frame_1         = Frame(root)
+frame_2         = Frame(root)
+frame_3         = Frame(root)
+frame_4         = Frame(root)
+frame_5         = Frame(root)
 
-entry = Entry(root, cnf=CNF_ENTRY, insertbackground=fg)
-btn_copy = Button(root, cnf=CNF_BTN, text='copy', command=copy)         
-btn_abs_sin = Button(root, cnf=CNF_BTN, text='|X|', command=lambda: my_mixin("abs_sin"))
-btn_reverse_cos = Button(root, cnf=CNF_BTN, text='1/X', command=lambda: my_mixin("reverse_cos"))
-btn_sqrt_tan = Button(root, cnf=CNF_BTN, text='√X', command=lambda: my_mixin("sqrt_tan"))
-btn_x2_log = Button(root, cnf=CNF_BTN, text='X²', command=lambda:my_mixin("x2_log"))
-btn_second = Button(root, cnf=CNF_BTN, text='2nd', command=second) 
-btn_mul = Button(root, cnf=CNF_BTN, text='*', command=lambda:insert('*'))   
-btn_clear1 = Button(root, cnf=CNF_BTN, text='←', command=clear1)            
+frame_4_left    = Frame(frame_4)
+frame_4_right   = Frame(frame_4)
+
+frame_4_left_1  = Frame(frame_4_left)
+frame_4_left_2  = Frame(frame_4_left)
+
+frame_1         .pack(side='top', expand=1, fill='both')
+frame_2         .pack(side='top', expand=1, fill='both')
+frame_3         .pack(side='top', expand=1, fill='both')
+frame_4         .pack(side='top', expand=1, fill='both')
+frame_5         .pack(side='top', expand=1, fill='both')
+
+frame_4_left    .pack(side='left', expand=1, fill='both')
+frame_4_right   .pack(side='right', expand=1, fill='both')
+
+frame_4_left_1  .pack(side='top', expand=1, fill='both')
+frame_4_left_2  .pack(side='top', expand=1, fill='both')
+
+entry = Entry(frame_1, cnf=CNF_ENTRY, insertbackground=fg)
+btn_copy = Button(frame_1, cnf=CNF_BTN, text='copy', command=copy, padx=20)         
+btn_abs_sin = Button(frame_2, cnf=CNF_BTN, text='|X|', command=lambda: my_mixin("abs_sin"))
+btn_reverse_cos = Button(frame_2, cnf=CNF_BTN, text='1/X', command=lambda: my_mixin("reverse_cos"))
+btn_sqrt_tan = Button(frame_2, cnf=CNF_BTN, text='√X', command=lambda: my_mixin("sqrt_tan"))
+btn_x2_log = Button(frame_2, cnf=CNF_BTN, text='X²', command=lambda:my_mixin("x2_log"))
+btn_second = Button(frame_2, cnf=CNF_BTN, text='2nd', command=second) 
+btn_mul = Button(frame_2, cnf=CNF_BTN, text='*', command=lambda:insert('*'))   
+btn_clear1 = Button(frame_2, cnf=CNF_BTN, text='←', command=clear1)            
 btn_numbers = []
 for i in range(1, 6):
-    btn_numbers.append(Button(root, cnf=CNF_BTN, text=i, command=lambda i=i:insert(i)))
-    btn_numbers[i-1].grid(row=3, column=i, cnf=CNF_GRID)
-btn_div = Button(root, cnf=CNF_BTN, text='/', command=lambda:insert('/'))   
-btn_clear = Button(root, cnf=CNF_BTN, text='C', command=clear)         
+    btn_numbers.append(Button(frame_3, cnf=CNF_BTN, text=i, command=lambda i=i:insert(i)))
+    btn_numbers[i-1].pack(expand=1, fill='both', side='left')
+btn_div = Button(frame_3, cnf=CNF_BTN, text='/', command=lambda:insert('/'))   
+btn_clear = Button(frame_3, cnf=CNF_BTN, text='C', command=clear)         
 for i in range(6, 10):
-    btn_numbers.append(Button(root, cnf=CNF_BTN, text=i, command=lambda i=i:insert(i)))
-    btn_numbers[i-1].grid(row=4, column=i-5, cnf=CNF_GRID)
-btn0 = Button(root, cnf=CNF_BTN, text='0', command=lambda:insert('0'))      
-btn_minus = Button(root, cnf=CNF_BTN, text='-', command=lambda:insert('-'))     
-btn_plus = Button(root, cnf=CNF_BTN, text='+', command=lambda:insert('+'))     
+    btn_numbers.append(Button(frame_4_left_1, cnf=CNF_BTN, text=i, command=lambda i=i:insert(i)))
+    btn_numbers[i-1].pack(expand=1, fill='both', side='left')
+btn0 = Button(frame_4_left_1, cnf=CNF_BTN, text='0', command=lambda:insert('0'))      
+btn_minus = Button(frame_4_left_1, cnf=CNF_BTN, text='-', command=lambda:insert('-'))     
+btn_plus = Button(frame_4_right, cnf=CNF_BTN, text='+', command=lambda:insert('+'))     
 
-btn00 = Button(root, cnf=CNF_BTN, text='00', command=lambda:insert('00'))
-btn000 = Button(root, cnf=CNF_BTN, text='000', command=lambda:insert('000'))
-btn_dot = Button(root, cnf=CNF_BTN, text='.', command=lambda:insert('.'))     
-btn_paranthes_open = Button(root, cnf=CNF_BTN, text='(', command=lambda:insert('('))     
-btn_paranthes_close = Button(root, cnf=CNF_BTN, text=')', command=lambda:insert(')'))    
-btn_equal = Button(root, cnf=CNF_BTN, text='=', command=equal, bg='green', fg='white', activebackground='lime', activeforeground='white')   
+btn00 = Button(frame_4_left_2, cnf=CNF_BTN, text='00', command=lambda:insert('00'))
+btn000 = Button(frame_5, cnf=CNF_BTN, text='000', command=lambda:insert('000'))
+btn0000 = Button(frame_5, cnf=CNF_BTN, text='0000', command=lambda:insert('0000'))
+btn_dot = Button(frame_4_left_2, cnf=CNF_BTN, text='.', command=lambda:insert('.'))     
+btn_paranthes_open = Button(frame_4_left_2, cnf=CNF_BTN, text='(', command=lambda:insert('('))     
+btn_paranthes_close = Button(frame_4_left_2, cnf=CNF_BTN, text=')', command=lambda:insert(')'))    
+btn_equal = Button(frame_4_left_2, cnf=CNF_BTN, text='=', command=equal, bg='green', fg='white', activebackground='lime', activeforeground='white')   
 
 
-
-entry                   .grid(row=1, column=1, rowspan=1, columnspan=6, cnf=CNF_GRID)
-btn_copy                .grid(row=1, column=7, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_abs_sin             .grid(row=2, column=1, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_reverse_cos         .grid(row=2, column=2, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_sqrt_tan            .grid(row=2, column=3, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_x2_log              .grid(row=2, column=4, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_second              .grid(row=2, column=5, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_mul                 .grid(row=2, column=6, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_clear1              .grid(row=2, column=7, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_div                 .grid(row=3, column=6, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_clear               .grid(row=3, column=7, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn0                    .grid(row=4, column=5, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_minus               .grid(row=4, column=6, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_plus                .grid(row=4, column=7, rowspan=2, columnspan=1, cnf=CNF_GRID)
-btn00                   .grid(row=5, column=1, rowspan=1, columnspan=2, cnf=CNF_GRID)
-btn000                  .grid(row=6, column=1, rowspan=1, columnspan=3, cnf=CNF_GRID)
-btn_dot                 .grid(row=5, column=3, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_paranthes_open      .grid(row=5, column=4, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_paranthes_close     .grid(row=5, column=5, rowspan=1, columnspan=1, cnf=CNF_GRID)
-btn_equal               .grid(row=5, column=6, rowspan=1, columnspan=1, cnf=CNF_GRID)
+entry                   .pack(cnf=CNF_PACK)
+btn_copy                .pack(expand=0, fill='both', side='left')
+btn_abs_sin             .pack(cnf=CNF_PACK)
+btn_reverse_cos         .pack(cnf=CNF_PACK)
+btn_sqrt_tan            .pack(cnf=CNF_PACK)
+btn_x2_log              .pack(cnf=CNF_PACK)
+btn_second              .pack(cnf=CNF_PACK)
+btn_mul                 .pack(cnf=CNF_PACK)
+btn_clear1              .pack(cnf=CNF_PACK)
+btn_div                 .pack(cnf=CNF_PACK)
+btn_clear               .pack(cnf=CNF_PACK)
+btn0                    .pack(cnf=CNF_PACK)
+btn_minus               .pack(cnf=CNF_PACK)
+btn_plus                .pack(cnf=CNF_PACK)
+btn00                   .pack(cnf=CNF_PACK)
+btn_dot                 .pack(cnf=CNF_PACK)
+btn_paranthes_open      .pack(cnf=CNF_PACK)
+btn_paranthes_close     .pack(cnf=CNF_PACK)
+btn_equal               .pack(cnf=CNF_PACK)
+btn000                  .pack(cnf=CNF_PACK)
+btn0000                 .pack(cnf=CNF_PACK)
 
 root.mainloop()
