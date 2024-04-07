@@ -136,11 +136,3 @@ Button(root, text='Save this Password', cnf=CNF_BTN, command=save).grid(row=6, c
 entry = Entry(root, cnf=CNF_ENTRY)
 entry.grid(row=5, column=2, columnspan=3, cnf=CNF_GRID)
 root.mainloop()
-
-# lower
-# upper
-# punctuation
-# numbers
-# default length => 16 enable and disable => spinbox
-# spinbox is disabled at first => range 12 - 16
-# save by dialog to where and wich name
