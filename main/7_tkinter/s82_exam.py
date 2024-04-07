@@ -113,14 +113,27 @@ CNF_GRID = {
     'pady': 5
 }
 
+def send():
+    msb.showinfo("Grade", f"Your grade is {grade}/{len(questions)}")
+    root.destroy()
+
+def next_question(index):
+    global questions, grade
+    if sv.get() == questions[index].get('correct_answer'):
+        grade += 1
+    if index == len(questions)-1:
+        send()
+        return
+    index += 1
+    lbl_question.config(text=questions[index].get('question'))
+    temp = questions[index].get('answers')
+    rb1.config(text=temp[0], value=temp[0], command=lambda:next_question(index))
+    rb2.config(text=temp[1], value=temp[1], command=lambda:next_question(index))
+    rb3.config(text=temp[2], value=temp[2], command=lambda:next_question(index))
+    rb4.config(text=temp[3], value=temp[3], command=lambda:next_question(index))
+
 def start():
-    def send():
-        grade = 0
-        for index, question in enumerate(questions):
-            if sv_list[index].get()==question.get('correct_answer'):
-                grade+=1                
-        msb.showinfo("Grade", f"Your grade is {grade}/{len(questions)}")
-        root.destroy()
+    global questions
     combo_difficulty.grid_forget()
     btn_start.grid_forget()
     difficulty = combo_difficulty.get()
@@ -130,15 +143,20 @@ def start():
         questions = questions_medium.copy()
     elif difficulty=='hard':
         questions = questions_hard.copy()
-    sv_list = []
-    for row, question in enumerate(questions):
-        sv_list.append(StringVar(root))
-        Label(root, text=question.get('question'), cnf=CNF_LABEL).grid(row=2*row, column=1, columnspan=4, sticky='w')
-        for column, answer in enumerate(question.get('answers')):
-            sv_list[row].set('alaki')
-            Radiobutton(root, text=answer, variable=sv_list[row], value=answer, cnf=CNF_RADIO).grid(row=2*row+1, column=column+1, sticky='w')
-    Button(root, text='Send', cnf=CNF_BTN, command=send).grid(row=1000, column=1)
+    index = 0
+    lbl_question.config(text=questions[index].get('question'))
+    temp = questions[index].get('answers')
+    rb1.config(text=temp[0], value=temp[0], command=lambda:next_question(index))
+    rb2.config(text=temp[1], value=temp[1], command=lambda:next_question(index))
+    rb3.config(text=temp[2], value=temp[2], command=lambda:next_question(index))
+    rb4.config(text=temp[3], value=temp[3], command=lambda:next_question(index))
+    lbl_question.grid(row=1, column=1, columnspan=4, sticky='w')
+    rb1.grid(row=2, column=1, sticky='w')
+    rb2.grid(row=2, column=2, sticky='w')
+    rb3.grid(row=2, column=3, sticky='w')
+    rb4.grid(row=2, column=4, sticky='w')
 
+grade = 0
 root = Tk()
 root.config(bg=BG)
 combo_difficulty = ttk.Combobox(root, values=['easy', 'normal', 'hard'])
@@ -147,5 +165,13 @@ combo_difficulty.config(state='readonly')
 combo_difficulty.grid()
 btn_start = Button(root, text='Start', cnf=CNF_BTN, command=start)
 btn_start.grid()
+lbl_question = Label(root, cnf=CNF_LABEL)
+sv = StringVar(root)
+sv.set("alaki")
+rb1 = Radiobutton(root, cnf=CNF_RADIO, variable=sv)
+rb2 = Radiobutton(root, cnf=CNF_RADIO, variable=sv)
+rb3 = Radiobutton(root, cnf=CNF_RADIO, variable=sv)
+rb4 = Radiobutton(root, cnf=CNF_RADIO, variable=sv)
+
 root.mainloop()
 
