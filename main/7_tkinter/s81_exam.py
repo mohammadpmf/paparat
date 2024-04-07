@@ -82,6 +82,29 @@ questions_hard = [
     }
 ]
 
+BG = 'light blue'
+FG = 'brown'
+CNF_BTN = {
+    'bg': BG,
+    'fg': FG,
+    'font': ('Calibri', 24),
+    'padx': 10,
+    'pady': 5
+}
+CNF_RADIO = {
+    'bg': BG,
+    'fg': FG,
+    'font': ('Calibri', 24),
+    'padx': 10,
+    'pady': 5
+}
+CNF_GRID = {
+    'padx': 10,
+    'pady': 5
+}
 
-
+from tkinter import *
+root = Tk()
+root.config(bg=BG)
+root.mainloop()
 
