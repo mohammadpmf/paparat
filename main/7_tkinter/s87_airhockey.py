@@ -86,14 +86,11 @@ def move_ball():
     lbl_ball.place(x=TABLE_WIDTH//2-BALL_SIZE//2, y=TABLE_HEIGHT//2-BALL_SIZE//2, width=BALL_SIZE, height=BALL_SIZE)
     sleep(3)
     lbl_start_time.place_forget()
-    if score_red==5:
-        message = f"Red Wins"
-        lbl_start_time.config(text=message)
-        lbl_start_time.place(x=TABLE_WIDTH//2-5*BALL_SIZE+8, y=TABLE_HEIGHT//2-1.6*BALL_SIZE)
-        lbl_ball.place_forget()
-        return
-    elif score_blue==5:
-        message = f"Blue Wins"
+    if score_red==5 or score_blue==5:
+        if score_red == 5:
+            message = f"Red Wins"
+        else:
+            message = f"Blue Wins"
         lbl_start_time.config(text=message)
         lbl_start_time.place(x=TABLE_WIDTH//2-5*BALL_SIZE+8, y=TABLE_HEIGHT//2-1.6*BALL_SIZE)
         lbl_ball.place_forget()
