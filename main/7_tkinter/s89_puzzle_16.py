@@ -11,6 +11,13 @@ time = 0
 number_of_moves = 0
 is_playing = False
 record = "59:59"
+is_moving = False
+houses = [
+    (0, 0), (0, 1), (0, 2), (0, 3),
+    (1, 0), (1, 1), (1, 2), (1, 3),
+    (2, 0), (2, 1), (2, 2), (2, 3),
+    (3, 0), (3, 1), (3, 2), (3, 3),
+]
 
 
 class Square():
@@ -184,6 +191,7 @@ def set_right_place_state():
 
 
 def set_states():
+    global empty
     for square in squares:
         square: Square
         info = square.btn.place_info()
@@ -247,24 +255,28 @@ def key_release(event:Event):
         is_moving = True
         if event.keysym == "Left":
             for square in squares:
+                square: Square
                 if square.left:
                     square.move()
                     is_moving = False
                     return
         elif event.keysym == "Right":
             for square in squares:
+                square: Square
                 if square.right:
                     square.move()
                     is_moving = False    
                     return
         elif event.keysym == "Up":
             for square in squares:
+                square: Square
                 if square.top:
                     square.move()
                     is_moving = False    
                     return
         elif event.keysym == "Down":
             for square in squares:
+                square: Square
                 if square.bottom:
                     square.move()
                     is_moving = False    
@@ -273,14 +285,7 @@ def key_release(event:Event):
             is_moving = False
 
 
-is_moving = False
-houses = [
-    (0, 0), (0, 1), (0, 2), (0, 3),
-    (1, 0), (1, 1), (1, 2), (1, 3),
-    (2, 0), (2, 1), (2, 2), (2, 3),
-    (3, 0), (3, 1), (3, 2), (3, 3),
-]
-# messagebox.showinfo("Description", "Welcome.\nYou Should put numbers in order from 1 to 15.\nWhen each number is in the right place, it changes to green.\nWhen all numbers are in their places puzzle is finished.\nYou can click on buttons to move them or use arrow keys on keyboard.\nIf arrow keys stuck, press 'a' on keyboard.\nPress r to reset the game.")
+messagebox.showinfo("Description", "Welcome.\nYou Should put numbers in order from 1 to 15.\nWhen each number is in the right place, it changes to green.\nWhen all numbers are in their places puzzle is finished.\nYou can click on buttons to move them or use arrow keys on keyboard.\nIf arrow keys stuck, press 'a' on keyboard.\nPress r to reset the game.")
 root = Tk()
 # root.iconbitmap(r'1.ico')
 root.focus_force()
