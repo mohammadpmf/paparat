@@ -22,11 +22,12 @@ def start():
 
 
 def go_down(letter: str):
+    global x_me
     b = Button(root, text=letter, bg=random.choice(COLORS))
     x=random.randint(0, 270)
     for i in range(0, 601, 10):
         if i>510:
-            if x>p-30 and x<p+100:
+            if x>x_me-30 and x<x_me+100:
                 me['text'] += letter
                 b.place_forget()
                 return
@@ -38,17 +39,17 @@ def go_down(letter: str):
 
 
 def key_press(e: Event):
-    global p
-    if e.keysym == 'Right' and p<200:
-        p+=5
-        me.place(x=p)
-    elif e.keysym == 'Left' and p>0:
-        p-=5
-        me.place(x=p)
+    global x_me
+    if e.keysym == 'Right' and x_me<200:
+        x_me+=5
+        me.place(x=x_me)
+    elif e.keysym == 'Left' and x_me>0:
+        x_me-=5
+        me.place(x=x_me)
 
 
 letters = list(ascii_letters)
-p=100
+x_me=100
 root = Tk()
 root.bind("<KeyPress>", key_press)
 root.geometry("300x600+300+150")
