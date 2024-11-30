@@ -3,6 +3,9 @@ darkc0de.lst
 background.mp3
 temp.py
 test.py
+s93_send_simple_sms.txt
+s94_send_verification_sms.txt
+my_token.py
 ### AL ###
 #Template for AL projects for Dynamics 365 Business Central
 #launch.json folder
