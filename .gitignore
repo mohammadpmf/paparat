@@ -6,6 +6,7 @@ test.py
 s93_send_simple_sms.txt
 s94_send_verification_sms.txt
 my_token.py
+venv/
 ### AL ###
 #Template for AL projects for Dynamics 365 Business Central
 #launch.json folder
