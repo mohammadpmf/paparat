@@ -1,0 +1,10 @@
+https://stackoverflow.com/questions/123198/how-to-copy-files
+
+همون جواب اول رو نگاه کردم که از همه راحت تر بود.
+اما با os هم میشه تابعی داشت به اسم 
+popen
+:D
+و یا با os.sys میشه انجام داد.
+با
+subprocess
+هم میشه انجام داد.
