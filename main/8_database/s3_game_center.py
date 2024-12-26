@@ -1,9 +1,19 @@
 from tkinter import *
+from tkinter import messagebox as msb
 from config import *
+from connection import Connection
+
 
 def change_window(hide_window: Tk, show_window: Tk):
     hide_window.withdraw()
     show_window.deiconify()
+
+
+connection = Connection()
+if not connection.check_connection():
+    msb.showerror("Error", "Could not connect to Database.")
+    exit()
+
 
 root = Tk()
 root.config(bg=BG)
