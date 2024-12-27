@@ -1,4 +1,5 @@
 import pymysql
+from functions import hash_password
 
 queries = [
     "CREATE SCHEMA IF NOT EXISTS `aparat_game_center`;",
@@ -63,6 +64,51 @@ class Connection():
             return True
         except:
             return False
+    
+    def insert_user(self, username, password, name=None, surname=None):
+        query = "INSERT INTO `aparat_game_center`.`users` (`name`, `surname`, `username`,\
+              `password`, `access_level`) VALUES (%s, %s, %s, %s, '2');"
+        hashed_password = hash_password(password, username)
+        values = name, surname, username, hashed_password
+        try:
+            self.cursor.execute(query, values)
+            self.connection.commit()
+            return 0, "OK"
+        except pymysql.err.IntegrityError:
+            return 2, "Duplicate"
+    
+    def login(self, username, password):
+        query = "SELECT * FROM `aparat_game_center`.`users` WHERE `username`=%s;"
+        values = username
+        self.cursor.execute(query, values)
+        result = self.cursor.fetchone()
+        if result==None:
+            return -1, "Username does not exist!"
+        id, hashed_password, access_level = result[0], result[4], result[5]
+        password = hash_password(password, username)
+        if password == hashed_password:
+            message = f"Welcome {result[1]} {result[2]}"
+            return 0, message, access_level
+        return -1, "Wrong password!"
+
+    def insert_game(self, name, company, release_date, price, genre, age_range):
+        query = "INSERT INTO `aparat_game_center`.`games` (`name`, `company`, `release_date`, `price`,\
+              `genre`, `age_range`) VALUES (%s, %s, %s, %s, %s, %s);"
+        values = name, company, release_date, price, genre, age_range
+        try:
+            self.cursor.execute(query, values)
+            self.connection.commit()
+            return 0, "OK"
+        except pymysql.err.IntegrityError:
+            return 2, "Duplicate"
+        except pymysql.err.DataError as error:
+            if """1366, "Incorrect integer value:""" in str(error):
+                return 5, "Age"
+            elif """1264, "Out of range value for column 'price""" in str(error):
+                return 10, "Price"
+            elif """1406, "Data too long for column""" in str(error):
+                return 1000, "Long Data"
+        return -1, "Unknown Error"
 
     def __del__(self):
         if self.check_connection():
