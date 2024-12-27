@@ -91,6 +91,50 @@ class Connection():
             return 0, message, access_level
         return -1, "Wrong password!"
 
+    def insert_game(self, name, company, release_date, price, genre, age_range):
+        query = "INSERT INTO `aparat_game_center`.`games` (`name`, `company`, `release_date`, `price`,\
+              `genre`, `age_range`) VALUES (%s, %s, %s, %s, %s, %s);"
+        values = name, company, release_date, price, genre, age_range
+        try:
+            self.cursor.execute(query, values)
+            self.connection.commit()
+            return 0, "OK"
+        except pymysql.err.IntegrityError:
+            return 2, "Duplicate"
+    
+    def get(self, name):
+        query = "SELECT * FROM `aparat_game_center`.`games` WHERE `name` = %s;"
+        values = name
+        self.cursor.execute(query, values)
+        result = self.cursor.fetchone()
+        if result==None:
+            return -1, "Game not found!"
+        return 0, result
+
+    def delete(self, name):
+        result = self.get(name)
+        if result[0]==-1:
+            return -1, "Game not found!"
+        id = result[1][0]
+        query = "DELETE FROM `aparat_game_center`.`games` WHERE (`id` = %s);"
+        values = id
+        self.cursor.execute(query, values)
+        self.connection.commit()
+        return 0, f"Game {name} deleted successfully!"
+    
+    def update_game(self, name, company, release_date, price, genre, age_range, new_name):
+        query = "UPDATE `aparat_game_center`.`games` SET `name` = %s, `company` = %s, `release_date` = %s,\
+              `price` = %s, `genre` = %s, `age_range` = %s WHERE (`id` = %s);"
+        result = self.get(name)
+        if result[0]==-1:
+            return -1, "Game not found!"
+        id = result[1][0]
+        if new_name=='':
+            new_name=name
+        values = new_name, company, release_date, price, genre, age_range, id
+        self.cursor.execute(query, values)
+        self.connection.commit()
+        return 0, f"Game {name} updated successfully!"
 
     def __del__(self):
         if self.check_connection():

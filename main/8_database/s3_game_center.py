@@ -5,8 +5,18 @@ from connection import Connection
 
 
 def change_window(hide_window: Tk, show_window: Tk):
+    global access_level
     hide_window.withdraw()
     show_window.deiconify()
+    if show_window==main_window:
+        if access_level==1:
+            btn_view_orders_main_window_manager      .grid(row=1, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+            btn_view_orders_main_window_user         .grid_forget()
+            btn_add_update_delete_game_main_window   .grid(row=2, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+        else:
+            btn_view_orders_main_window_manager      .grid_forget()
+            btn_view_orders_main_window_user         .grid(row=1, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+            btn_add_update_delete_game_main_window   .grid_forget()
 
 
 def create_account():
@@ -56,12 +66,78 @@ def login():
         msb.showerror("Error", message)
     elif result[0]==0:
         access_level = result[2]
-        print(access_level)
         change_window(login_window, main_window)
         msb.showinfo("Successfull Login", message)
 
 
-    
+def create_game():
+    name = entry_name_add_update_delete_window.get().strip()
+    company = entry_company_add_update_delete_window.get().strip()
+    date = entry_date_add_update_delete_window.get().strip()
+    price = entry_price_add_update_delete_window.get().strip()
+    genre = entry_genre_add_update_delete_window.get().strip()
+    age_range = entry_age_range_add_update_delete_window.get().strip()
+    result = connection.insert_game(name, company, date, price, genre, age_range) 
+    if result[1] == "OK":
+        msb.showinfo("Success", f"Game '{name}' created successfully!")
+    elif result[1] == "Duplicate":
+        msb.showerror("Error", f"Game '{name}' already exists!")
+
+
+def reset_game():
+    entry_name_add_update_delete_window.delete(0, END)
+    entry_new_name_add_update_delete_window.delete(0, END)
+    entry_company_add_update_delete_window.delete(0, END)
+    entry_date_add_update_delete_window.delete(0, END)
+    entry_price_add_update_delete_window.delete(0, END)
+    entry_genre_add_update_delete_window.delete(0, END)
+    entry_age_range_add_update_delete_window.delete(0, END)
+    entry_name_add_update_delete_window.focus_set()
+
+
+def search_game():
+    name = entry_name_add_update_delete_window.get().strip()
+    result = connection.get(name)
+    if result[0]==-1:
+        msb.showwarning("Error", result[1])
+    elif result[0]==0:
+        result = result[1]
+        entry_company_add_update_delete_window.delete(0, END)
+        entry_company_add_update_delete_window.insert(0, result[2])
+        entry_date_add_update_delete_window.delete(0, END)
+        entry_date_add_update_delete_window.insert(0, result[3])
+        entry_price_add_update_delete_window.delete(0, END)
+        entry_price_add_update_delete_window.insert(0, result[4])
+        entry_genre_add_update_delete_window.delete(0, END)
+        entry_genre_add_update_delete_window.insert(0, result[5])
+        entry_age_range_add_update_delete_window.delete(0, END)
+        entry_age_range_add_update_delete_window.insert(0, result[6])
+
+
+def update_game():
+    name = entry_name_add_update_delete_window.get().strip()
+    new_name = entry_new_name_add_update_delete_window.get().strip()
+    company = entry_company_add_update_delete_window.get().strip()
+    date = entry_date_add_update_delete_window.get().strip()
+    price = entry_price_add_update_delete_window.get().strip()
+    genre = entry_genre_add_update_delete_window.get().strip()
+    age_range = entry_age_range_add_update_delete_window.get().strip()
+    result = connection.update_game(name, company, date, price, genre, age_range, new_name)
+    if result[0]==-1:
+        msb.showwarning("Error", result[1])
+    elif result[0]==0:
+        msb.showinfo("Success", result[1])
+
+
+def delete_game():
+    name = entry_name_add_update_delete_window.get().strip()
+    if msb.askyesno("Sure?", f"Are you sure you want to delete game {name}"):
+        result = connection.delete(name)
+        if result[0]==-1:
+            msb.showwarning("Error", result[1])
+        elif result[0]==0:
+            msb.showinfo("Success", result[1])
+
 
 connection = Connection()
 if not connection.check_connection():
@@ -70,6 +146,7 @@ if not connection.check_connection():
 
 
 root = Tk()
+root.withdraw()
 root.config(bg=BG)
 btn_sign_up_root                    = Button(root, cnf=CNF_BTNS, text='Sign Up', command=lambda:change_window(root, sign_up_window))
 btn_login_root                      = Button(root, cnf=CNF_BTNS, text='Login', command=lambda:change_window(root, login_window))
@@ -128,9 +205,9 @@ btn_view_orders_main_window_user         = Button(main_window, cnf=CNF_BTNS_SIGN
 btn_add_update_delete_game_main_window   = Button(main_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Add/Update/Delete a Game', command=lambda:change_window(main_window, add_update_delete_window))
 btn_search_games_main_window             = Button(main_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Search Games', command=lambda:change_window(main_window, search_window))
 btn_logout_main_window                   = Button(main_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Logout', command=lambda:change_window(main_window, login_window))
-btn_view_orders_main_window_manager      .grid(row=1, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
-btn_view_orders_main_window_user         .grid(row=1, column=2, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
-btn_add_update_delete_game_main_window   .grid(row=2, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+# btn_view_orders_main_window_manager      .grid(row=1, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+# btn_view_orders_main_window_user         .grid(row=1, column=2, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+# btn_add_update_delete_game_main_window   .grid(row=2, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 btn_search_games_main_window             .grid(row=3, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 btn_logout_main_window                   .grid(row=4, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 
@@ -175,32 +252,37 @@ btn_back_search_window              .grid(row=9, column=1, cnf=CNF_BTNS_SIGN_UP_
 
 
 add_update_delete_window                       = Toplevel(main_window, cnf=CNF_WINDOWS)
-add_update_delete_window                       .withdraw()
+# add_update_delete_window                       .withdraw()
 add_update_delete_window                       .protocol("WM_DELETE_WINDOW", root.destroy)
 label_name_add_update_delete_window            = Label(add_update_delete_window, text='Name: ', cnf=CNF_LBLS)
+label_new_name_add_update_delete_window        = Label(add_update_delete_window, text='New Name: ', cnf=CNF_LBLS)
 label_company_add_update_delete_window         = Label(add_update_delete_window, text='Company: ', cnf=CNF_LBLS)
 label_date_add_update_delete_window            = Label(add_update_delete_window, text='Date:', cnf=CNF_LBLS)
 label_price_add_update_delete_window           = Label(add_update_delete_window, text='Price: ', cnf=CNF_LBLS)
 label_genre_add_update_delete_window           = Label(add_update_delete_window, text='Genre: ', cnf=CNF_LBLS)
 label_age_range_add_update_delete_window       = Label(add_update_delete_window, text='Age Range: ', cnf=CNF_LBLS)
 entry_name_add_update_delete_window            = Entry(add_update_delete_window, cnf=CNF_ENTRY)
+entry_new_name_add_update_delete_window        = Entry(add_update_delete_window, cnf=CNF_ENTRY)
 entry_company_add_update_delete_window         = Entry(add_update_delete_window, cnf=CNF_ENTRY)
 entry_date_add_update_delete_window            = Entry(add_update_delete_window, cnf=CNF_ENTRY)
 entry_price_add_update_delete_window           = Entry(add_update_delete_window, cnf=CNF_ENTRY)
 entry_genre_add_update_delete_window           = Entry(add_update_delete_window, cnf=CNF_ENTRY)
 entry_age_range_add_update_delete_window       = Entry(add_update_delete_window, cnf=CNF_ENTRY)
-btn_insert_add_update_delete_window            = Button(add_update_delete_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Insert Game', command=None)
-btn_update_add_update_delete_window            = Button(add_update_delete_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Update Game', command=None)
-btn_delete_add_update_delete_window            = Button(add_update_delete_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Delete Game', command=None)
-btn_reset_add_update_delete_window             = Button(add_update_delete_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Reset', command=None)
+btn_insert_add_update_delete_window            = Button(add_update_delete_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Insert Game', command=create_game)
+btn_update_add_update_delete_window            = Button(add_update_delete_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Update Game', command=update_game)
+btn_delete_add_update_delete_window            = Button(add_update_delete_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Delete Game', command=delete_game)
+btn_reset_add_update_delete_window             = Button(add_update_delete_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Reset', command=reset_game)
 btn_back_add_update_delete_window              = Button(add_update_delete_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Back', command=lambda:change_window(add_update_delete_window, main_window))
+btn_search_add_update_delete_window            = Button(add_update_delete_window, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Search', command=search_game)
 label_name_add_update_delete_window            .grid(row=1, column=1)
+label_new_name_add_update_delete_window        .grid(row=1, column=3)
 label_company_add_update_delete_window         .grid(row=2, column=1)
 label_date_add_update_delete_window            .grid(row=3, column=1)
 label_price_add_update_delete_window           .grid(row=4, column=1)
 label_genre_add_update_delete_window           .grid(row=5, column=1)
 label_age_range_add_update_delete_window       .grid(row=6, column=1)
 entry_name_add_update_delete_window            .grid(row=1, column=2)
+entry_new_name_add_update_delete_window        .grid(row=1, column=4)
 entry_company_add_update_delete_window         .grid(row=2, column=2)
 entry_date_add_update_delete_window            .grid(row=3, column=2)
 entry_price_add_update_delete_window           .grid(row=4, column=2)
@@ -210,7 +292,8 @@ btn_insert_add_update_delete_window            .grid(row=7, column=1)
 btn_update_add_update_delete_window            .grid(row=7, column=2)
 btn_delete_add_update_delete_window            .grid(row=8, column=1)
 btn_reset_add_update_delete_window             .grid(row=8, column=2)
-btn_back_add_update_delete_window              .grid(row=9, column=1, columnspan=2, sticky='ew')
+btn_back_add_update_delete_window              .grid(row=9, column=1)
+btn_search_add_update_delete_window            .grid(row=9, column=2)
 
 view_orders_window_manager          = Toplevel(login_window, cnf=CNF_WINDOWS)
 view_orders_window_manager          .withdraw()
