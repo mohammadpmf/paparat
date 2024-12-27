@@ -91,24 +91,6 @@ class Connection():
             return 0, message, access_level
         return -1, "Wrong password!"
 
-    def insert_game(self, name, company, release_date, price, genre, age_range):
-        query = "INSERT INTO `aparat_game_center`.`games` (`name`, `company`, `release_date`, `price`,\
-              `genre`, `age_range`) VALUES (%s, %s, %s, %s, %s, %s);"
-        values = name, company, release_date, price, genre, age_range
-        try:
-            self.cursor.execute(query, values)
-            self.connection.commit()
-            return 0, "OK"
-        except pymysql.err.IntegrityError:
-            return 2, "Duplicate"
-        except pymysql.err.DataError as error:
-            if """1366, "Incorrect integer value:""" in str(error):
-                return 5, "Age"
-            elif """1264, "Out of range value for column 'price""" in str(error):
-                return 10, "Price"
-            elif """1406, "Data too long for column""" in str(error):
-                return 1000, "Long Data"
-        return -1, "Unknown Error"
 
     def __del__(self):
         if self.check_connection():
