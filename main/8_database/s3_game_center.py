@@ -35,6 +35,7 @@ def change_window(hide_window: Tk, show_window: Tk):
         for index, order in enumerate(result):
             treev_view_search_window.insert("", END, text=order[0], values=(index+1, *order[1:]))
 
+
 def create_account():
     name = entry_name_sign_up_window.get().strip()
     surname = entry_surname_sign_up_window.get().strip()
@@ -190,20 +191,23 @@ def search_between_games():
         treev_view_search_window.insert("", END, text=order[0], values=(index+1, *order[1:]))
 
 
-
+access_level=2
 connection = Connection()
 if not connection.check_connection():
     msb.showerror("Error", "Could not connect to Database.")
     exit()
 
-
-access_level=2
+############################## root ##############################
 root = Tk()
 root.config(bg=BG)
 btn_sign_up_root                    = Button(root, cnf=CNF_BTNS, text='Sign Up', command=lambda:change_window(root, sign_up_window))
 btn_login_root                      = Button(root, cnf=CNF_BTNS, text='Login', command=lambda:change_window(root, login_window))
 btn_sign_up_root                    .grid(row=1, column=1, cnf=CNF_BTNS_GRID)
 btn_login_root                      .grid(row=2, column=1, cnf=CNF_BTNS_GRID)
+############################## End root ##############################
+
+
+############################## sign_up_window ##############################
 sign_up_window                      = Toplevel(root, cnf=CNF_WINDOWS)
 sign_up_window                      .withdraw()
 sign_up_window                      .protocol("WM_DELETE_WINDOW", root.destroy)
@@ -231,8 +235,10 @@ entry_password1_sign_up_window      .grid(row=4, column=2, cnf=CNF_BTNS_GRID)
 entry_password2_sign_up_window      .grid(row=5, column=2, cnf=CNF_BTNS_GRID)
 btn_sign_up_sign_up_window          .grid(row=6, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 btn_back_sign_up_window             .grid(row=6, column=2, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+############################## End sign_up_window ##############################
 
 
+############################## login_window ##############################
 login_window                        = Toplevel(root, cnf=CNF_WINDOWS)
 login_window                        .withdraw()
 login_window                        .protocol("WM_DELETE_WINDOW", root.destroy)
@@ -248,7 +254,10 @@ entry_username_login_window         .grid(row=1, column=2, cnf=CNF_BTNS_GRID)
 entry_password_login_window         .grid(row=2, column=2, cnf=CNF_BTNS_GRID)
 btn_login_login_window              .grid(row=3, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 btn_back_login_window               .grid(row=3, column=2, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+############################## End login_window ##############################
 
+
+############################## main_window ##############################
 main_window                              = Toplevel(login_window, cnf=CNF_WINDOWS)
 main_window                              .withdraw()
 main_window                              .protocol("WM_DELETE_WINDOW", root.destroy)
@@ -262,7 +271,10 @@ btn_logout_main_window                   = Button(main_window, cnf=CNF_BTNS_SIGN
 # btn_add_update_delete_game_main_window   .grid(row=2, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 btn_search_games_main_window             .grid(row=3, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 btn_logout_main_window                   .grid(row=4, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+############################## End main_window ##############################
 
+
+############################## search_window ##############################
 search_window                       = Toplevel(main_window, cnf=CNF_WINDOWS)
 search_window                       .withdraw()
 search_window                       .protocol("WM_DELETE_WINDOW", root.destroy)
@@ -300,29 +312,31 @@ entry_age_range_search_window       .grid(row=7, column=2)
 btn_search_search_window            .grid(row=8, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 btn_order_search_window             .grid(row=8, column=2, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 btn_back_search_window              .grid(row=9, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
-treev_view_search_window = ttk.Treeview(search_window, selectmode='browse', show='headings')
-treev_view_search_window.grid(row=1, rowspan=9, column=3, sticky='ns')
-verscrlbar = ttk.Scrollbar(search_window, orient="vertical", command=treev_view_search_window.yview)
-verscrlbar.grid(row=1, rowspan=9, column=4, sticky='ns')
-treev_view_search_window.config(yscrollcommand=verscrlbar.set)
-treev_view_search_window["columns"] = ("1", "2", "3", "4", "5", "6", "7")
-treev_view_search_window.column("1", width = 100, anchor ='c')
-treev_view_search_window.column("2", width = 160, anchor ='c')
-treev_view_search_window.column("3", width = 160, anchor ='c')
-treev_view_search_window.column("4", width = 160, anchor ='c')
-treev_view_search_window.column("5", width = 160, anchor ='c')
-treev_view_search_window.column("6", width = 160, anchor ='c')
-treev_view_search_window.column("7", width = 160, anchor ='c')
-treev_view_search_window.heading("1", text="Row")
-treev_view_search_window.heading("2", text="Name")
-treev_view_search_window.heading("3", text="Company")
-treev_view_search_window.heading("4", text="Date")
-treev_view_search_window.heading("5", text="Price")
-treev_view_search_window.heading("6", text="Genre")
-treev_view_search_window.heading("7", text="Age Range")
+treev_view_search_window            = ttk.Treeview(search_window, selectmode='browse', show='headings')
+treev_view_search_window            .grid(row=1, rowspan=9, column=3, sticky='ns')
+verscrlbar_treev_view_search_window = ttk.Scrollbar(search_window, orient="vertical", command=treev_view_search_window.yview)
+verscrlbar_treev_view_search_window .grid(row=1, rowspan=9, column=4, sticky='ns')
+treev_view_search_window            .config(yscrollcommand=verscrlbar_treev_view_search_window.set)
+treev_view_search_window            ["columns"] = ("1", "2", "3", "4", "5", "6", "7")
+treev_view_search_window            .column("1", width = 100, anchor ='c')
+treev_view_search_window            .column("2", width = 160, anchor ='c')
+treev_view_search_window            .column("3", width = 160, anchor ='c')
+treev_view_search_window            .column("4", width = 160, anchor ='c')
+treev_view_search_window            .column("5", width = 160, anchor ='c')
+treev_view_search_window            .column("6", width = 160, anchor ='c')
+treev_view_search_window            .column("7", width = 160, anchor ='c')
+treev_view_search_window            .heading("1", text="Row")
+treev_view_search_window            .heading("2", text="Name")
+treev_view_search_window            .heading("3", text="Company")
+treev_view_search_window            .heading("4", text="Date")
+treev_view_search_window            .heading("5", text="Price")
+treev_view_search_window            .heading("6", text="Genre")
+treev_view_search_window            .heading("7", text="Age Range")
+############################## End search_window ##############################
 
 
 
+############################## add_update_delete_window ##############################
 add_update_delete_window                       = Toplevel(main_window, cnf=CNF_WINDOWS)
 add_update_delete_window                       .withdraw()
 add_update_delete_window                       .protocol("WM_DELETE_WINDOW", root.destroy)
@@ -366,49 +380,53 @@ btn_delete_add_update_delete_window            .grid(row=8, column=1)
 btn_reset_add_update_delete_window             .grid(row=8, column=2)
 btn_back_add_update_delete_window              .grid(row=9, column=1)
 btn_search_add_update_delete_window            .grid(row=9, column=2)
-
-view_orders_window_manager          = Toplevel(login_window, cnf=CNF_WINDOWS)
-view_orders_window_manager          .withdraw()
-view_orders_window_manager          .protocol("WM_DELETE_WINDOW", root.destroy)
-btn_back_view_orders_window_manager = Button(view_orders_window_manager, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Back', command=lambda:change_window(view_orders_window_manager, main_window))
-btn_back_view_orders_window_manager .grid(row=2, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
-treev_view_orders_window_manager = ttk.Treeview(view_orders_window_manager, selectmode='browse', show='headings')
-treev_view_orders_window_manager.grid(row=1, column=1)
-verscrlbar = ttk.Scrollbar(view_orders_window_manager, orient="vertical", command=treev_view_orders_window_manager.yview)
-verscrlbar.grid(row=1, column=2, sticky='ns')
-treev_view_orders_window_manager.config(yscrollcommand=verscrlbar.set)
-treev_view_orders_window_manager["columns"] = ("1", "2", "3", "4", "5")
-treev_view_orders_window_manager.column("1", width = 200, anchor ='c')
-treev_view_orders_window_manager.column("2", width = 200, anchor ='c')
-treev_view_orders_window_manager.column("3", width = 200, anchor ='c')
-treev_view_orders_window_manager.column("4", width = 200, anchor ='c')
-treev_view_orders_window_manager.column("5", width = 200, anchor ='c')
-treev_view_orders_window_manager.heading("1", text="Row")
-treev_view_orders_window_manager.heading("2", text="Full Name")
-treev_view_orders_window_manager.heading("3", text="Username")
-treev_view_orders_window_manager.heading("4", text="Game")
-treev_view_orders_window_manager.heading("5", text="Datetime Ordered")
+############################## End add_update_delete_window ##############################
 
 
-view_orders_window_user          = Toplevel(login_window, cnf=CNF_WINDOWS)
-view_orders_window_user          .withdraw()
-view_orders_window_user          .protocol("WM_DELETE_WINDOW", root.destroy)
-btn_back_view_orders_window_user = Button(view_orders_window_user, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Back', command=lambda:change_window(view_orders_window_user, main_window))
-btn_back_view_orders_window_user .grid(row=2, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
-treev_view_orders_window_user = ttk.Treeview(view_orders_window_user, selectmode='browse', show='headings')
-treev_view_orders_window_user.grid(row=1, column=1)
-verscrlbar = ttk.Scrollbar(view_orders_window_user, orient="vertical", command=treev_view_orders_window_user.yview)
-verscrlbar.grid(row=1, column=2, sticky='ns')
-treev_view_orders_window_user.config(yscrollcommand=verscrlbar.set)
-treev_view_orders_window_user["columns"] = ("1", "2", "3", "4")
-treev_view_orders_window_user.column("1", width = 200, anchor ='c')
-treev_view_orders_window_user.column("2", width = 200, anchor ='c')
-treev_view_orders_window_user.column("3", width = 200, anchor ='c')
-treev_view_orders_window_user.column("4", width = 200, anchor ='c')
-treev_view_orders_window_user.heading("1", text="Row")
-treev_view_orders_window_user.heading("2", text="Game")
-treev_view_orders_window_user.heading("3", text="Price")
-treev_view_orders_window_user.heading("4", text="Datetime Ordered")
+############################## view_orders_window_manager ##############################
+view_orders_window_manager                  = Toplevel(login_window, cnf=CNF_WINDOWS)
+view_orders_window_manager                  .withdraw()
+view_orders_window_manager                  .protocol("WM_DELETE_WINDOW", root.destroy)
+btn_back_view_orders_window_manager         = Button(view_orders_window_manager, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Back', command=lambda:change_window(view_orders_window_manager, main_window))
+btn_back_view_orders_window_manager         .grid(row=2, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+treev_view_orders_window_manager            = ttk.Treeview(view_orders_window_manager, selectmode='browse', show='headings')
+treev_view_orders_window_manager            .grid(row=1, column=1)
+verscrlbar_treev_view_orders_window_manager = ttk.Scrollbar(view_orders_window_manager, orient="vertical", command=treev_view_orders_window_manager.yview)
+verscrlbar_treev_view_orders_window_manager .grid(row=1, column=2, sticky='ns')
+treev_view_orders_window_manager            .config(yscrollcommand=verscrlbar_treev_view_orders_window_manager.set)
+treev_view_orders_window_manager            ["columns"] = ("1", "2", "3", "4", "5")
+treev_view_orders_window_manager            .column("1", width = 200, anchor ='c')
+treev_view_orders_window_manager            .column("2", width = 200, anchor ='c')
+treev_view_orders_window_manager            .column("3", width = 200, anchor ='c')
+treev_view_orders_window_manager            .column("4", width = 200, anchor ='c')
+treev_view_orders_window_manager            .column("5", width = 200, anchor ='c')
+treev_view_orders_window_manager            .heading("1", text="Row")
+treev_view_orders_window_manager            .heading("2", text="Full Name")
+treev_view_orders_window_manager            .heading("3", text="Username")
+treev_view_orders_window_manager            .heading("4", text="Game")
+treev_view_orders_window_manager            .heading("5", text="Datetime Ordered")
+############################## End view_orders_window_manager ##############################
 
 
+############################## view_orders_window_user ##############################
+view_orders_window_user                     = Toplevel(login_window, cnf=CNF_WINDOWS)
+view_orders_window_user                     .withdraw()
+view_orders_window_user                     .protocol("WM_DELETE_WINDOW", root.destroy)
+btn_back_view_orders_window_user            = Button(view_orders_window_user, cnf=CNF_BTNS_SIGN_UP_WINDOW, width=24, text='Back', command=lambda:change_window(view_orders_window_user, main_window))
+btn_back_view_orders_window_user            .grid(row=2, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
+treev_view_orders_window_user               = ttk.Treeview(view_orders_window_user, selectmode='browse', show='headings')
+treev_view_orders_window_user               .grid(row=1, column=1)
+verscrlbar_treev_view_orders_window_user    = ttk.Scrollbar(view_orders_window_user, orient="vertical", command=treev_view_orders_window_user.yview)
+verscrlbar_treev_view_orders_window_user    .grid(row=1, column=2, sticky='ns')
+treev_view_orders_window_user               .config(yscrollcommand=verscrlbar_treev_view_orders_window_user.set)
+treev_view_orders_window_user               ["columns"] = ("1", "2", "3", "4")
+treev_view_orders_window_user               .column("1", width = 200, anchor ='c')
+treev_view_orders_window_user               .column("2", width = 200, anchor ='c')
+treev_view_orders_window_user               .column("3", width = 200, anchor ='c')
+treev_view_orders_window_user               .column("4", width = 200, anchor ='c')
+treev_view_orders_window_user               .heading("1", text="Row")
+treev_view_orders_window_user               .heading("2", text="Game")
+treev_view_orders_window_user               .heading("3", text="Price")
+treev_view_orders_window_user               .heading("4", text="Datetime Ordered")
+############################## End view_orders_window_user ##############################
 mainloop()
