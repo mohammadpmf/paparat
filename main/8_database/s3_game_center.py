@@ -301,7 +301,7 @@ btn_search_search_window            .grid(row=8, column=1, cnf=CNF_BTNS_SIGN_UP_
 btn_order_search_window             .grid(row=8, column=2, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 btn_back_search_window              .grid(row=9, column=1, cnf=CNF_BTNS_SIGN_UP_WINDOW_GRID)
 treev_view_search_window = ttk.Treeview(search_window, selectmode='browse', show='headings')
-treev_view_search_window.grid(row=1, rowspan=9, column=3)
+treev_view_search_window.grid(row=1, rowspan=9, column=3, sticky='ns')
 verscrlbar = ttk.Scrollbar(search_window, orient="vertical", command=treev_view_search_window.yview)
 verscrlbar.grid(row=1, rowspan=9, column=4, sticky='ns')
 treev_view_search_window.config(yscrollcommand=verscrlbar.set)
