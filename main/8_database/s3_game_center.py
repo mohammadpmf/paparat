@@ -244,6 +244,18 @@ btn_sign_up_root.grid(row=1, column=1, cnf=CNF_BTNS_GRID)
 btn_login_root.grid(row=2, column=1, cnf=CNF_BTNS_GRID)
 ############################## End root ##############################
 
+style = ttk.Style(root)
+# style.theme_use('clam')
+style.theme_create(f'madval_style', parent='alt',settings = {'TCombobox':{'configure':{'selectbackground': BG,'fieldbackground': BG,'background': BG}}})
+style.theme_use(f'madval_style')
+style.map('TCombobox', fieldbackground=[('readonly', BG)])
+style.map('TCombobox', selectbackground=[('readonly', BG)])
+style.map('TCombobox', selectforeground=[('readonly',  FG)])
+style.configure("Treeview",background=BG,foreground=FG,rowheight=32,fieldbackground=BG, font=('Consalos', 16))
+style.configure("Treeview.Heading", background="#222222", foreground="cyan", font=('Consalos', 18))
+style.map("Treeview",background=[('selected', FG)])
+style.map("Treeview",foreground=[('selected', BG)])
+
 
 ############################## sign_up_window ##############################
 sign_up_window = Toplevel(root, cnf=CNF_WINDOWS)
