@@ -144,22 +144,22 @@ class Connection():
         ON `orders`.`game`=`games`.`id` JOIN `users`\
         ON `orders`.`user`=`users`.`id`;"
         self.cursor.execute(query)
-        resutl = self.cursor.fetchall()
-        return resutl
+        result = self.cursor.fetchall()
+        return result
     
     def get_all_orders_of_user_by_id(self, user_id):
         query = "SELECT `orders`.`id`, `name` AS `game`, `price`, `datetime_ordered` FROM `orders`\
               JOIN `games` ON `orders`.`game`=`games`.`id` WHERE `user`=%s;"
         values = user_id
         self.cursor.execute(query, values)
-        resutl = self.cursor.fetchall()
-        return resutl
+        result = self.cursor.fetchall()
+        return result
     
     def get_all_games(self):
         query = "SELECT * FROM `games`;"
         self.cursor.execute(query)
-        resutl = self.cursor.fetchall()
-        return resutl
+        result = self.cursor.fetchall()
+        return result
 
     def search_between_games(self, name, company, date, price_min, price_max, genre, age_range):
         query = "SELECT * FROM `games` WHERE 1=1"
@@ -187,8 +187,8 @@ class Connection():
             values.append(age_range)
         query += ";"
         self.cursor.execute(query, values)
-        resutl = self.cursor.fetchall()
-        return resutl
+        result = self.cursor.fetchall()
+        return result
     
     def insert_order(self, user, game, datetime_ordered):
         query = "INSERT INTO `orders` (`user`, `game`, `datetime_ordered`) VALUES (%s, %s, %s);"
